@@ -11,7 +11,8 @@
     "db:studio": "drizzle-kit studio",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "commit": "cz"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.10.1",
@@ -30,12 +31,14 @@
     "zod": "^3.23.3"
   },
   "devDependencies": {
+    "@endemolshinegroup/cz-github": "^2.0.0",
     "@types/eslint": "^8.56.10",
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^8.1.0",
     "@typescript-eslint/parser": "^8.1.0",
+    "commitizen": "^4.3.0",
     "drizzle-kit": "^0.24.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.4",
@@ -48,5 +51,17 @@
   },
   "ct3aMetadata": {
     "initVersion": "7.37.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@endemolshinegroup/cz-github",
+      "@endemolshinegroup/cz-github": {
+        "scopes": {
+          "api": "For API commits",
+          "site": "For frontend commits",
+          "docs": "For documentation commits"
+        }
+      }
+    }
   }
 }
