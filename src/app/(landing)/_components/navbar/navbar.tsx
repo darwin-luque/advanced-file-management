@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export const LandingNavbar = () => {
   return (
-    <header className="bg-background sticky top-0 flex h-16 items-center justify-between border-b px-4 md:px-6">
+    <header className="sticky top-0 flex h-20 items-center justify-between border-b px-4 md:px-6">
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-8 md:text-sm lg:gap-10">
         <div className="flex items-center gap-2 text-lg font-semibold md:text-base">
           <NotebookPen className="h-6 w-6" />
