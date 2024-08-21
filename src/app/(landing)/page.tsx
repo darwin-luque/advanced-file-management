@@ -1,3 +1,9 @@
+import { LandingHero } from "./_components/hero";
+
 export default async function Home() {
-  return <div></div>;
+  return (
+    <main>
+      <LandingHero />
+    </main>
+  );
 }
