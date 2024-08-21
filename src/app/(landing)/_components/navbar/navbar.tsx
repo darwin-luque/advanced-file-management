@@ -2,6 +2,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Menu, NotebookPen } from "lucide-react";
 import Link from "next/link";
 
@@ -68,12 +69,12 @@ export const LandingNavbar = () => {
         </SheetContent>
       </Sheet>
       <div className="flex items-center gap-4 md:gap-2 lg:gap-4">
-        <Link href="/sign-in" className={buttonVariants({ variant: "ghost" })}>
-          Sign in
-        </Link>
-        <Link href="/sign-up" className={buttonVariants()}>
-          Sign up
-        </Link>
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
         <Separator orientation="vertical" />
         <ModeToggle />
       </div>
