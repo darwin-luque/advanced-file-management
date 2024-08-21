@@ -3,7 +3,7 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { Menu, NotebookPen } from "lucide-react";
+import { ArrowRight, Menu, NotebookPen } from "lucide-react";
 import Link from "next/link";
 
 export const LandingNavbar = () => {
@@ -74,6 +74,10 @@ export const LandingNavbar = () => {
         </SignedOut>
         <SignedIn>
           <UserButton />
+          <Link href="/app" className={buttonVariants({ variant: "link" })}>
+            App
+            <ArrowRight className="ml-1 h-4 w-4" />
+          </Link>
         </SignedIn>
         <Separator orientation="vertical" />
         <ModeToggle />
