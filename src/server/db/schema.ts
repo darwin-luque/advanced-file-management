@@ -18,11 +18,34 @@ export const permissionLevelsEnum = pgEnum("workspace_permission_levels_enum", [
   "admin",
 ]);
 
+export const users = pgTable("user", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  username: varchar("username", { length: 255 }),
+  firstName: varchar("first_name", { length: 255 }),
+  lastName: varchar("last_name", { length: 255 }),
+  hasImage: boolean("has_image").default(false).notNull(),
+  imageUrl: varchar("image_url", { length: 255 }).notNull(),
+  banned: boolean("banned").default(false).notNull(),
+  locked: boolean("locked").default(false).notNull(),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
+});
+
+export const usersRelations = relations(users, ({ many }) => ({
+  workspaces: many(workspaces),
+  workspaceCollaborators: many(workspaceCollaborators),
+  folders: many(folders),
+  files: many(files),
+  fileCollaborators: many(collaborators),
+}));
+
 export const workspaces = pgTable(
   "workspace",
   {
     id: uuid("id").defaultRandom().primaryKey(),
-    ownerId: varchar("owner_id", { length: 255 }).notNull(),
+    ownerId: varchar("owner_id", { length: 255 })
+      .notNull()
+      .references(() => users.id),
     name: varchar("name", { length: 255 }).notNull(),
     isShared: boolean("is_shared").default(false).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -39,7 +62,11 @@ export const workspaces = pgTable(
   }),
 );
 
-export const workspacesRelations = relations(workspaces, ({ many }) => ({
+export const workspacesRelations = relations(workspaces, ({ many, one }) => ({
+  owner: one(users, {
+    fields: [workspaces.ownerId],
+    references: [users.id],
+  }),
   collaborators: many(workspaceCollaborators),
   folders: many(folders),
 }));
@@ -49,7 +76,9 @@ export const workspaceCollaborators = pgTable("workspace_collaborator", {
   workspaceId: uuid("workspace_id")
     .notNull()
     .references(() => workspaces.id),
-  userId: varchar("user_id", { length: 255 }).notNull(),
+  userId: varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => users.id),
   permissionLevel: permissionLevelsEnum("permission_level").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
@@ -61,6 +90,10 @@ export const workspaceCollaborators = pgTable("workspace_collaborator", {
 export const workspaceCollaboratorsRelations = relations(
   workspaceCollaborators,
   ({ one }) => ({
+    user: one(users, {
+      fields: [workspaceCollaborators.userId],
+      references: [users.id],
+    }),
     workspace: one(workspaces, {
       fields: [workspaceCollaborators.id],
       references: [workspaces.id],
@@ -73,7 +106,9 @@ export const folders = pgTable("folder", {
   name: varchar("name", { length: 255 }).notNull(),
   workspaceId: uuid("workspace_id").notNull(),
   parentFolderId: uuid("parent_folder_id").references(() => workspaces.id),
-  owner_id: varchar("owner_id", { length: 255 }).notNull(),
+  ownerId: varchar("owner_id", { length: 255 })
+    .notNull()
+    .references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -82,6 +117,10 @@ export const folders = pgTable("folder", {
 });
 
 export const foldersRelations = relations(folders, ({ one, many }) => ({
+  owner: one(users, {
+    fields: [folders.ownerId],
+    references: [users.id],
+  }),
   workspace: one(workspaces, {
     fields: [folders.workspaceId],
     references: [workspaces.id],
@@ -100,7 +139,7 @@ export const files = pgTable("file", {
   folderId: uuid("folder_id")
     .notNull()
     .references(() => folders.id),
-  owner_id: varchar("owner_id", { length: 255 }).notNull(),
+  ownerId: varchar("owner_id", { length: 255 }).notNull(),
   content: jsonb("content").notNull(),
   size: integer("size").notNull(),
   currentVersionId: uuid("current_version_id"),
@@ -112,6 +151,10 @@ export const files = pgTable("file", {
 });
 
 export const filesRelations = relations(files, ({ one, many }) => ({
+  owner: one(users, {
+    fields: [files.ownerId],
+    references: [users.id],
+  }),
   folder: one(folders, {
     fields: [files.folderId],
     references: [folders.id],
