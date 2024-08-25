@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useWorkspace } from "../../../../providers/workspace";
 import { Filesystem } from "./filesystem";
+import { ScrollArea } from "../../../../components/ui/scroll-area";
 
 export const AppSidebar: FC = () => {
   const { currentWorkspace } = useWorkspace();
@@ -25,20 +26,15 @@ export const AppSidebar: FC = () => {
               <span className="sr-only">Toggle notifications</span>
             </Button>
           </div>
-          <div className="flex-1">
+          <ScrollArea className="flex-1 scroll-auto">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               {currentWorkspace ? (
-                <Filesystem parentId={currentWorkspace.id} type="workspace" />
+                <div className="mt-1">
+                  <Filesystem parentId={currentWorkspace.id} type="workspace" />
+                </div>
               ) : null}
-              {/* <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Home className="h-4 w-4" />
-                Dashboard
-              </Link> */}
             </nav>
-          </div>
+          </ScrollArea>
           {/* <div className="mt-auto p-4">
             <Card x-chunk="dashboard-02-chunk-0">
               <CardHeader className="p-2 pt-0 md:p-4">
@@ -75,13 +71,14 @@ export const AppSidebar: FC = () => {
                   <NotebookPen className="h-6 w-6" />
                   <span className="">AFM</span>
                 </Link>
-                {/* <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Home className="h-5 w-5" />
-                  Dashboard
-                </Link> */}
+                {currentWorkspace ? (
+                  <div className="mx-2 mt-1">
+                    <Filesystem
+                      parentId={currentWorkspace.id}
+                      type="workspace"
+                    />
+                  </div>
+                ) : null}
               </nav>
               {/* <div className="mt-auto">
                 <Card>

@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { api } from "@/trpc/react";
 import { FilesystemItem } from "./item";
+import { FilesystemLoader } from "./loader";
 
 export type FilesystemProps = {
   parentId: string;
@@ -13,12 +14,14 @@ export const Filesystem: FC<FilesystemProps> = ({
   type,
   className,
 }) => {
-  const { data } = api.workspaces.content.useQuery({
+  const { data, isLoading } = api.workspaces.content.useQuery({
     referenceId: parentId,
     type,
   });
 
-  return (
+  return isLoading ? (
+    <FilesystemLoader />
+  ) : (
     <ul className={className}>
       {data?.map((node) => (
         <FilesystemItem
