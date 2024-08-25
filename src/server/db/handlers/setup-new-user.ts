@@ -34,6 +34,7 @@ export const setupNewUser = async (user: UserJSON): Promise<void> => {
     .values({
       name: `${userName}'s Workspace`,
       ownerId: newUser.id,
+      isDefault: true,
     })
     .returning();
 

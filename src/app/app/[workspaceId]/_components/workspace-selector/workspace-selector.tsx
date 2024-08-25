@@ -62,7 +62,6 @@ export const WorkspaceSelector: FC<WorkspaceSelectorProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [showNewWorkspaceDialog, setShowNewWorkspaceDialog] = useState(false);
-  const { currentWorkspace, changeWorkspace } = useWorkspace();
   const { data } = api.workspaces.listForUserGrouped.useQuery();
   const groupedWorkspace = useMemo(() => {
     if (!data) return [];

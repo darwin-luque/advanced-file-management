@@ -3,7 +3,6 @@ import type { FC } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useWorkspace } from "@/providers/workspace";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { api } from "@/trpc/react";
@@ -14,7 +13,7 @@ import {
   FormLabel,
   FormControl,
 } from "@/components/ui/form";
-import { DialogClose } from "../../../../../../../components/ui/dialog";
+import { DialogClose } from "../../../../../../../../components/ui/dialog";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -32,7 +31,6 @@ export const NewFolderForm: FC<NewFolderFormProps> = ({ parentId }) => {
       name: "",
     },
   });
-  const { currentWorkspace } = useWorkspace();
   const createFolder = api.folders.create.useMutation({
     onSettled: () => {
       form.reset();
@@ -41,8 +39,6 @@ export const NewFolderForm: FC<NewFolderFormProps> = ({ parentId }) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!currentWorkspace) return;
-
     const promise = createFolder.mutateAsync({
       parentFolderId: parentId,
       name: values.name,

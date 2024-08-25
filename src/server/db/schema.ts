@@ -47,6 +47,7 @@ export const workspaces = pgTable(
       .notNull()
       .references(() => users.id),
     name: varchar("name", { length: 255 }).notNull(),
+    isDefault: boolean("is_default").default(false).notNull(),
     isShared: boolean("is_shared").default(false).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")

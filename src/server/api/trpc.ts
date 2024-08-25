@@ -3,12 +3,12 @@ import superjson from "superjson";
 import { z, ZodError } from "zod";
 import type { NextRequest } from 'next/server';
 import { db } from "@/server/db";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth as clerkAuth } from "@clerk/nextjs/server";
 import { workspaceCollaborators, workspaces } from "../db/schema";
 import { and, eq, or } from "drizzle-orm";
 
 export const createTRPCContext = async (opts: { headers: Headers; req: NextRequest; }) => {
-  const auth = getAuth(opts.req);
+  const auth = clerkAuth();
 
   return {
     db,
