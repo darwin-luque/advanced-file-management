@@ -8,7 +8,7 @@ import type { PropsWithChildren } from "react";
 import { AppResizableLayout } from "./_components/resizable-layout";
 import {} from "@clerk/nextjs/server";
 import { WorkspaceProvider } from "../../providers/workspace";
-import { WorkspaceSidebar } from "./_components/workspace-sidebar";
+import { AppSidebar } from "./_components/sidebar";
 
 export default function AppLayout({ children }: PropsWithChildren) {
   const currentWorkspaceId = cookies().get(COOKIE_CURRENT_WORKSPACE_ID);
@@ -31,7 +31,7 @@ export default function AppLayout({ children }: PropsWithChildren) {
         defaultCollapsed={defaultCollapsed}
         defaultLayout={defaultLayout}
         navCollapsedSize={4}
-        sidebar={<WorkspaceSidebar />}
+        sidebar={<AppSidebar />}
       >
         {children}
       </AppResizableLayout>
