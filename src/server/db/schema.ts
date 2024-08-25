@@ -104,8 +104,8 @@ export const workspaceCollaboratorsRelations = relations(
 export const folders = pgTable("folder", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
-  workspaceId: uuid("workspace_id").notNull(),
-  parentFolderId: uuid("parent_folder_id").references(() => workspaces.id),
+  workspaceId: uuid("workspace_id").notNull().references(() => workspaces.id),
+  parentFolderId: uuid("parent_folder_id"),
   ownerId: varchar("owner_id", { length: 255 })
     .notNull()
     .references(() => users.id),

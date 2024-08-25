@@ -1,11 +1,13 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
-import { ZodError } from "zod";
+import { z, ZodError } from "zod";
 import type { NextRequest } from 'next/server';
 import { db } from "@/server/db";
 import { getAuth } from "@clerk/nextjs/server";
+import { workspaceCollaborators, workspaces } from "../db/schema";
+import { and, eq, or } from "drizzle-orm";
 
-export const createTRPCContext = async (opts: { headers: Headers; req: NextRequest }) => {
+export const createTRPCContext = async (opts: { headers: Headers; req: NextRequest; }) => {
   const auth = getAuth(opts.req);
 
   return {
@@ -52,11 +54,48 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 
 export const publicProcedure = t.procedure.use(timingMiddleware);
 
-export const privateProcedure = t.procedure
-  .use(({ ctx, next }) => {
-    if (!ctx.auth.userId) {
-      throw new TRPCError({ code: "UNAUTHORIZED" });
+const authMiddleware = t.middleware(({ ctx, next }) => {
+  if (!ctx.auth.userId) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  return next();
+});
+
+export const privateProcedure = t.procedure.use(authMiddleware);
+
+export const workspaceProcedure = t.procedure
+  .use(authMiddleware)
+  .input(z.object({ workspaceId: z.string().uuid() }))
+  .use(async ({ ctx, next, input }) => {
+    const [workspace] = await ctx.db
+      .select({ id: workspaces.id })
+      .from(workspaces)
+      .leftJoin(
+        workspaceCollaborators,
+        eq(workspaceCollaborators.workspaceId, workspaces.id)
+      )
+      .where(
+        and(
+          eq(workspaces.id, input.workspaceId),
+          or(
+            eq(workspaceCollaborators.userId, ctx.auth.userId ?? ""),
+            eq(workspaces.ownerId, ctx.auth.userId ?? "")
+          )
+        )
+      );
+
+    if (!workspace) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Workspace not found",
+      });
     }
 
-    return next();
+    return next({
+      ctx: {
+        ...ctx,
+        workspace,
+      }
+    });
   });

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 import { files, folders } from "@/server/db/schema";
 import { privateProcedure } from "@/server/api/trpc";
 
@@ -26,10 +26,9 @@ export const getContentForWorkspace = privateProcedure
             ownerId: folders.ownerId,
             createdAt: folders.createdAt,
             updatedAt: folders.updatedAt,
-            hasChild: sql<boolean>`EXISTS (SELECT 1 FROM ${files} WHERE ${files.folderId} = ${folders.id}) OR EXISTS (SELECT 1 FROM ${folders} WHERE ${folders.parentFolderId} = ${folders.id})`,
           })
           .from(folders)
-          .where(eq(folders.workspaceId, referenceId));
+          .where(and(eq(folders.workspaceId, referenceId), isNull(folders.parentFolderId)));
       case "folder":
         const foundFolders = await ctx.db
           .select({
@@ -40,7 +39,6 @@ export const getContentForWorkspace = privateProcedure
             ownerId: folders.ownerId,
             createdAt: folders.createdAt,
             updatedAt: folders.updatedAt,
-            hasChild: sql<boolean>`EXISTS (SELECT 1 FROM ${files} WHERE ${files.folderId} = ${folders.id}) OR EXISTS (SELECT 1 FROM ${folders} WHERE ${folders.parentFolderId} = ${folders.id})`,
           })
           .from(folders)
           .where(eq(folders.parentFolderId, referenceId));
@@ -54,7 +52,6 @@ export const getContentForWorkspace = privateProcedure
             ownerId: files.ownerId,
             createdAt: files.createdAt,
             updatedAt: files.updatedAt,
-            hasChild: sql<boolean>`false`,
           })
           .from(files)
           .where(eq(files.folderId, referenceId));

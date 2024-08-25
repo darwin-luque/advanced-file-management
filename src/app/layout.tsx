@@ -1,9 +1,10 @@
-import { ThemeProvider } from "@/providers/theme";
 import "@/styles/globals.css";
-import { TRPCReactProvider } from "@/trpc/react";
-import { ClerkProvider } from "@clerk/nextjs";
-import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
+import { GeistSans } from "geist/font/sans";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@/providers/theme";
+import { TRPCReactProvider } from "@/trpc/react";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Advanced Note Taking App",
@@ -24,7 +25,10 @@ export default function RootLayout({
             attribute="class"
             defaultTheme="system"
           >
-            <TRPCReactProvider>{children}</TRPCReactProvider>
+            <TRPCReactProvider>
+              {children}
+              <Toaster richColors closeButton />
+            </TRPCReactProvider>
           </ThemeProvider>
         </body>
       </html>
