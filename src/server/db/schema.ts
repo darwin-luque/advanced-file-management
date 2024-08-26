@@ -102,20 +102,30 @@ export const workspaceCollaboratorsRelations = relations(
   }),
 );
 
-export const folders = pgTable("folder", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  workspaceId: uuid("workspace_id").notNull().references(() => workspaces.id),
-  parentFolderId: uuid("parent_folder_id"),
-  ownerId: varchar("owner_id", { length: 255 })
-    .notNull()
-    .references(() => users.id),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdateFn(() => sql`current_timestamp`)
-    .notNull(),
-});
+export const folders = pgTable(
+  "folder",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
+    workspaceId: uuid("workspace_id").notNull().references(() => workspaces.id),
+    parentFolderId: uuid("parent_folder_id"),
+    ownerId: varchar("owner_id", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdateFn(() => sql`current_timestamp`)
+      .notNull(),
+  },
+  (folders) => ({
+    folderWorkspaceParentUnique: uniqueIndex("folder_workspace_parent_unique").on(
+      folders.workspaceId,
+      folders.parentFolderId,
+      folders.name,
+    ),
+  }),
+);
 
 export const foldersRelations = relations(folders, ({ one, many }) => ({
   owner: one(users, {
@@ -134,22 +144,31 @@ export const foldersRelations = relations(folders, ({ one, many }) => ({
   collaborators: many(collaborators),
 }));
 
-export const files = pgTable("file", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  folderId: uuid("folder_id")
-    .notNull()
-    .references(() => folders.id),
-  ownerId: varchar("owner_id", { length: 255 }).notNull(),
-  content: jsonb("content").notNull(),
-  size: integer("size").notNull(),
-  currentVersionId: uuid("current_version_id"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdateFn(() => sql`current_timestamp`)
-    .notNull(),
-});
+export const files = pgTable(
+  "file",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
+    folderId: uuid("folder_id")
+      .notNull()
+      .references(() => folders.id),
+    ownerId: varchar("owner_id", { length: 255 }).notNull(),
+    content: jsonb("content").notNull(),
+    size: integer("size").notNull(),
+    currentVersionId: uuid("current_version_id"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdateFn(() => sql`current_timestamp`)
+      .notNull(),
+  },
+  (files) => ({
+    fileFolderUnique: uniqueIndex("file_folder_unique").on(
+      files.folderId,
+      files.name,
+    ),
+  }),
+);
 
 export const filesRelations = relations(files, ({ one, many }) => ({
   owner: one(users, {
