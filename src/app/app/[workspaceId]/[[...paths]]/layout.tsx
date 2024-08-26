@@ -1,10 +1,11 @@
 import type { PropsWithChildren } from "react";
 import {} from "@clerk/nextjs/server";
-import { AppSidebar } from "./_components/sidebar";
+import { AppSidebar } from "../_components/sidebar";
 
 export type AppLayoutProps = PropsWithChildren & {
   params: {
     workspaceId: string;
+    paths: string[];
   };
 };
 
