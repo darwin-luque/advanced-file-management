@@ -18,7 +18,7 @@ export const EditorToolbar: FC<MenuBarProps> = ({ editor, className }) => {
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center space-x-3 p-1 text-sm",
+        "flex flex-wrap items-center space-x-3 text-sm",
         className,
       )}
     >

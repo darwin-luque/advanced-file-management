@@ -1,6 +1,6 @@
 import { NoDocIcon } from "@/components/assets/icons/no-doc";
-import { api } from "../../../../trpc/server";
 import { AppEditor } from "./_components/editor";
+import { api } from "@/trpc/server";
 
 export type AppPageProps = {
   params: {
@@ -18,12 +18,12 @@ export default async function AppPage({ params }: AppPageProps) {
     );
   }
 
-  const joinedPath = params.paths.map((path) => decodeURI(path)).join("/");
-  const file = await api.files.getByPath(`/${joinedPath}`);
+  const paths = params.paths.map((path) => decodeURI(path));
+  const file = await api.files.getByPath(`/${paths.join("/")}`);
 
   return (
-    <main className="relative flex w-full h-full flex-col">
-      <AppEditor file={file} />
+    <main className="relative flex h-full w-full flex-col">
+      <AppEditor paths={paths} file={file} />
     </main>
-  )
+  );
 }
