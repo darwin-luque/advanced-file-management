@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/providers/theme";
 import { TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { HydrateClient } from "@/trpc/server";
 
 export const metadata: Metadata = {
   title: "Advanced Note Taking App",
@@ -27,10 +28,12 @@ export default function RootLayout({
             defaultTheme="system"
           >
             <TRPCReactProvider>
-              <TooltipProvider>
-                {children}
-                <Toaster richColors closeButton />
-              </TooltipProvider>
+              <HydrateClient>
+                <TooltipProvider>
+                  {children}
+                  <Toaster richColors closeButton />
+                </TooltipProvider>
+              </HydrateClient>
             </TRPCReactProvider>
           </ThemeProvider>
         </body>

@@ -22,6 +22,7 @@ type UseAppEditorProps = {
 
 export const useAppEditor = ({ content }: UseAppEditorProps = {}) => {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       Image,
       TaskList,
