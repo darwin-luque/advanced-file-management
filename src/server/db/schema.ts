@@ -6,6 +6,7 @@ import {
   pgEnum,
   pgTable,
   primaryKey,
+  text,
   timestamp,
   uniqueIndex,
   uuid,
@@ -154,7 +155,7 @@ export const files = pgTable(
       .notNull()
       .references(() => folders.id),
     ownerId: varchar("owner_id", { length: 255 }).notNull(),
-    content: jsonb("content").notNull(),
+    content: text("content").notNull(),
     size: integer("size").notNull(),
     path: varchar("path", { length: 255 }).unique().notNull(),
     currentVersionId: uuid("current_version_id"),
