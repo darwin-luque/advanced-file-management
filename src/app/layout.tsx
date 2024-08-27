@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/providers/theme";
 import { TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "Advanced Note Taking App",
@@ -26,8 +27,10 @@ export default function RootLayout({
             defaultTheme="system"
           >
             <TRPCReactProvider>
-              {children}
-              <Toaster richColors closeButton />
+              <TooltipProvider>
+                {children}
+                <Toaster richColors closeButton />
+              </TooltipProvider>
             </TRPCReactProvider>
           </ThemeProvider>
         </body>
