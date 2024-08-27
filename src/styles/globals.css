@@ -67,3 +67,26 @@
     @apply bg-background text-foreground;
   }
 }
+
+.tiptap h1,
+.tiptap h2 {
+  @apply mt-14 mb-6;
+}
+
+.tiptap h1 {
+  @apply text-2xl
+}
+
+.tiptap h2 {
+  @apply text-xl
+}
+
+.tiptap h3 {
+  @apply text-lg
+}
+
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
+  @apply text-base
+}
