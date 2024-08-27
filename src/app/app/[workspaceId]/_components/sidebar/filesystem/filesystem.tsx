@@ -7,12 +7,14 @@ export type FilesystemProps = {
   parentId: string;
   type: "workspace" | "folder";
   className?: string;
+  workspaceId: string;
 };
 
 export const Filesystem: FC<FilesystemProps> = ({
-  parentId,
   type,
+  parentId,
   className,
+  workspaceId,
 }) => {
   const { data, isLoading } = api.workspaces.content.useQuery({
     referenceId: parentId,
@@ -25,10 +27,16 @@ export const Filesystem: FC<FilesystemProps> = ({
     <ul className={className}>
       {data?.map((node) => (
         <FilesystemItem
+          workspaceId={workspaceId}
           node={node}
           key={node.id}
           nestedItems={
-            <Filesystem parentId={node.id} type="folder" className="pl-6" />
+            <Filesystem
+              workspaceId={workspaceId}
+              parentId={node.id}
+              type="folder"
+              className="pl-3"
+            />
           }
         />
       ))}

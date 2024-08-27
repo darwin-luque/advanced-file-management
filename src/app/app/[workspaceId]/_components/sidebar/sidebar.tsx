@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { FC } from "react";
 import { Bell, Menu, NotebookPen } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Filesystem } from "./filesystem";
 
@@ -27,12 +27,19 @@ export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId }) => {
               <span className="sr-only">Toggle notifications</span>
             </Button>
           </div>
-          <ScrollArea className="flex-1 scroll-auto">
-            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-              <div className="mt-1">
-                <Filesystem parentId={workspaceId} type="workspace" />
-              </div>
-            </nav>
+          <ScrollArea className="flex-1">
+            <ScrollArea className="w-full">
+              <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+                <div className="mt-1">
+                  <Filesystem
+                    workspaceId={workspaceId}
+                    parentId={workspaceId}
+                    type="workspace"
+                  />
+                </div>
+              </nav>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
           </ScrollArea>
         </div>
       </div>
@@ -56,7 +63,11 @@ export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId }) => {
                     <span className="">AFM</span>
                   </Link>
                   <div className="mx-2 mt-1">
-                    <Filesystem parentId={workspaceId} type="workspace" />
+                    <Filesystem
+                      workspaceId={workspaceId}
+                      parentId={workspaceId}
+                      type="workspace"
+                    />
                   </div>
                 </nav>
               </SheetContent>

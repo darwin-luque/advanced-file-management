@@ -19,12 +19,15 @@ const formSchema = z.object({
   name: z.string().min(1),
 });
 
-export type NewFolderFormProps = {
-  parentId: string;
+export type NewFileFormProps = {
+  folderId: string;
   workspaceId: string;
 };
 
-export const NewFolderForm: FC<NewFolderFormProps> = ({ parentId, workspaceId }) => {
+export const NewFileForm: FC<NewFileFormProps> = ({
+  folderId,
+  workspaceId,
+}) => {
   const utils = api.useUtils();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -32,7 +35,7 @@ export const NewFolderForm: FC<NewFolderFormProps> = ({ parentId, workspaceId })
       name: "",
     },
   });
-  const createFolder = api.folders.create.useMutation({
+  const createFile = api.files.create.useMutation({
     onSettled: () => {
       form.reset();
       void utils.workspaces.content.invalidate();
@@ -40,15 +43,15 @@ export const NewFolderForm: FC<NewFolderFormProps> = ({ parentId, workspaceId })
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const promise = createFolder.mutateAsync({
-      parentFolderId: parentId,
+    const promise = createFile.mutateAsync({
+      folderId,
       name: values.name,
       workspaceId,
     });
 
     toast.promise(promise, {
       loading: "Creating folder...",
-      success: (data) => `Folder ${data.name} created`,
+      success: (data) => `File ${data.name} created`,
       error: "Failed to create folder",
     });
   }
@@ -67,7 +70,7 @@ export const NewFolderForm: FC<NewFolderFormProps> = ({ parentId, workspaceId })
               <FormControl>
                 <Input
                   id="name"
-                  placeholder="Documentation"
+                  placeholder="Meeting notes 2021-09-01"
                   className="col-span-3"
                   {...field}
                 />
