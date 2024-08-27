@@ -15,11 +15,18 @@ export const createFolder = workspaceProcedure
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
 
+    const parentFolder = await ctx.db.query.folders.findFirst({
+      where(fields, { eq }) {
+        return eq(fields.id, input.parentFolderId ?? "");
+      },
+    });
+
     const [folder] = await ctx.db
       .insert(folders)
       .values({
         ...input,
         ownerId: ctx.auth.userId,
+        path: `${parentFolder?.path ?? ""}/${input.name}`,
       })
       .returning();
 

@@ -109,6 +109,7 @@ export const folders = pgTable(
     name: varchar("name", { length: 255 }).notNull(),
     workspaceId: uuid("workspace_id").notNull().references(() => workspaces.id),
     parentFolderId: uuid("parent_folder_id"),
+    path: varchar("path", { length: 255 }).unique().notNull(),
     ownerId: varchar("owner_id", { length: 255 })
       .notNull()
       .references(() => users.id),
@@ -155,6 +156,7 @@ export const files = pgTable(
     ownerId: varchar("owner_id", { length: 255 }).notNull(),
     content: jsonb("content").notNull(),
     size: integer("size").notNull(),
+    path: varchar("path", { length: 255 }).unique().notNull(),
     currentVersionId: uuid("current_version_id"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
