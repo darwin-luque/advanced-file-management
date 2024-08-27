@@ -37,7 +37,7 @@ export const useAppEditor = ({ content }: UseAppEditorProps = {}) => {
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert prose-base flex-1 m-5 focus:outline-none",
+          "prose dark:prose-invert prose-base flex-1 focus:outline-none",
       },
     },
     content:
