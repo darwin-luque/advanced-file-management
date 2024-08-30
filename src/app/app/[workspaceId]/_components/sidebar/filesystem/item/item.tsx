@@ -35,14 +35,16 @@ export type FilesystemItemProps = {
   };
   nestedItems?: ReactNode;
   workspaceId: string;
+  defaultOpen?: boolean;
 };
 
 export const FilesystemItem: FC<FilesystemItemProps> = ({
   node,
   nestedItems,
   workspaceId,
+  defaultOpen = false,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(defaultOpen);
   const [selectedDialog, setSelectedDialog] = useState<
     "new-file" | "new-folder"
   >();

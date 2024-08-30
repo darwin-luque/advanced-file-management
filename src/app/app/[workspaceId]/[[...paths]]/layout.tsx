@@ -12,7 +12,7 @@ export type AppLayoutProps = PropsWithChildren & {
 export default function AppLayout({ children, params }: AppLayoutProps) {
   return (
     <div className="flex min-h-screen w-full flex-col md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <AppSidebar workspaceId={params.workspaceId} />
+      <AppSidebar workspaceId={params.workspaceId} paths={params.paths} />
       <div className="flex flex-1 items-center justify-center gap-4 p-4 lg:gap-6 lg:p-6">
         {children}
       </div>

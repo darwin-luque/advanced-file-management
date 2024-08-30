@@ -10,9 +10,10 @@ import { Filesystem } from "./filesystem";
 
 export type AppSidebarProps = {
   workspaceId: string;
+  paths?: string[];
 };
 
-export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId }) => {
+export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId, paths }) => {
   return (
     <>
       <div className="hidden border-r bg-muted/40 md:block">
@@ -35,6 +36,8 @@ export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId }) => {
                     workspaceId={workspaceId}
                     parentId={workspaceId}
                     type="workspace"
+                    allPaths={paths}
+                    paths={paths}
                   />
                 </div>
               </nav>
