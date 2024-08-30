@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { and, eq, isNull, sql } from "drizzle-orm";
+import { and, asc, eq, isNull, sql } from "drizzle-orm";
 import { files, folders } from "@/server/db/schema";
 import { privateProcedure } from "@/server/api/trpc";
 
@@ -29,7 +29,8 @@ export const getContentForWorkspace = privateProcedure
             updatedAt: folders.updatedAt,
           })
           .from(folders)
-          .where(and(eq(folders.workspaceId, referenceId), isNull(folders.parentFolderId)));
+          .where(and(eq(folders.workspaceId, referenceId), isNull(folders.parentFolderId)))
+          .orderBy(asc(folders.name));
       case "folder":
         const foundFolders = await ctx.db
           .select({
@@ -43,7 +44,8 @@ export const getContentForWorkspace = privateProcedure
             updatedAt: folders.updatedAt,
           })
           .from(folders)
-          .where(eq(folders.parentFolderId, referenceId));
+          .where(eq(folders.parentFolderId, referenceId))
+          .orderBy(asc(folders.name));
 
         const foundFiles = await ctx.db
           .select({
@@ -57,7 +59,8 @@ export const getContentForWorkspace = privateProcedure
             updatedAt: files.updatedAt,
           })
           .from(files)
-          .where(eq(files.folderId, referenceId));
+          .where(eq(files.folderId, referenceId))
+          .orderBy(asc(files.name));
 
         return [...foundFolders, ...foundFiles];
     }
