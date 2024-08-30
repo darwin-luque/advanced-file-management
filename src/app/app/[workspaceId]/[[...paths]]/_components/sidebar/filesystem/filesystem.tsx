@@ -26,7 +26,7 @@ export const Filesystem: FC<FilesystemProps> = ({
   });
 
   const currentPath = useMemo(() => paths?.[0], [paths]);
-  const filteredPaths = useMemo(() => allPaths?.slice(1), [allPaths]);
+  const filteredPaths = useMemo(() => paths?.slice(1), [paths]);
 
   return isLoading ? (
     <FilesystemLoader />

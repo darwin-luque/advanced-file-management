@@ -4,7 +4,6 @@ import Link from "next/link";
 import type { FC } from "react";
 import { Bell, Menu, NotebookPen } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Filesystem } from "./filesystem";
 
@@ -16,8 +15,8 @@ export type AppSidebarProps = {
 export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId, paths }) => {
   return (
     <>
-      <div className="hidden border-r bg-muted/40 md:block">
-        <div className="flex h-full max-h-screen flex-col gap-2">
+      <div className="hidden h-screen border-r bg-muted/40 md:block">
+        <div className="flex h-full max-h-screen flex-col">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/app" className="flex items-center gap-2 font-semibold">
               <NotebookPen className="h-6 w-6" />
@@ -28,22 +27,17 @@ export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId, paths }) => {
               <span className="sr-only">Toggle notifications</span>
             </Button>
           </div>
-          <ScrollArea className="flex-1">
-            <ScrollArea className="w-full">
-              <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-                <div className="mt-1">
-                  <Filesystem
-                    workspaceId={workspaceId}
-                    parentId={workspaceId}
-                    type="workspace"
-                    allPaths={paths}
-                    paths={paths}
-                  />
-                </div>
-              </nav>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          </ScrollArea>
+          <nav className="mx-2 my-2 grid flex-1 items-start overflow-scroll rounded-md bg-muted/30 text-sm font-medium lg:px-4">
+            <div className="mt-1">
+              <Filesystem
+                workspaceId={workspaceId}
+                parentId={workspaceId}
+                type="workspace"
+                allPaths={paths}
+                paths={paths}
+              />
+            </div>
+          </nav>
         </div>
       </div>
       <div className="flex shrink-0 flex-col md:hidden">
@@ -55,9 +49,9 @@ export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId, paths }) => {
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <ScrollArea className="flex-1 scroll-auto">
-              <SheetContent side="left" className="flex flex-col">
-                <nav className="grid gap-2 text-lg font-medium">
+            <SheetContent side="left" className="flex flex-col p-0 w-full">
+              <nav className="flex flex-1 flex-col items-center text-lg font-medium">
+                <div className="flex h-14 items-center border-b w-full px-4">
                   <Link
                     href="#"
                     className="flex items-center gap-2 text-lg font-semibold"
@@ -65,16 +59,18 @@ export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId, paths }) => {
                     <NotebookPen className="h-6 w-6" />
                     <span className="">AFM</span>
                   </Link>
-                  <div className="mx-2 mt-1">
-                    <Filesystem
-                      workspaceId={workspaceId}
-                      parentId={workspaceId}
-                      type="workspace"
-                    />
-                  </div>
-                </nav>
-              </SheetContent>
-            </ScrollArea>
+                </div>
+                <div className="w-full h-full overflow-scroll px-1">
+                  <Filesystem
+                    workspaceId={workspaceId}
+                    parentId={workspaceId}
+                    type="workspace"
+                    allPaths={paths}
+                    paths={paths}
+                  />
+                </div>
+              </nav>
+            </SheetContent>
           </Sheet>
         </header>
       </div>
