@@ -21,6 +21,7 @@ import {
 import { NewFolderForm } from "./new-folder-form";
 import { NewFileForm } from "./new-file-form";
 import Link from "next/link";
+import { RenameForm } from "./rename-form";
 
 export type FilesystemItemProps = {
   node: {
@@ -46,7 +47,7 @@ export const FilesystemItem: FC<FilesystemItemProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [selectedDialog, setSelectedDialog] = useState<
-    "new-file" | "new-folder"
+    "new-file" | "new-folder" | "rename-file" | "rename-folder"
   >();
 
   return (
@@ -68,35 +69,48 @@ export const FilesystemItem: FC<FilesystemItemProps> = ({
               </ContextMenuTrigger>
             ) : null}
             {node.type === "file" ? (
-              <Link
-                href={`/app/${workspaceId}/${node.path}`}
-                className={buttonVariants({
-                  size: "file",
-                  variant: "file",
-                })}
-              >
-                <File className="h-4 w-4" />
-                <span className="ml-2">{node.name}</span>
-              </Link>
+              <ContextMenuTrigger asChild>
+                <Link
+                  href={`/app/${workspaceId}/${node.path}`}
+                  className={buttonVariants({
+                    size: "file",
+                    variant: "file",
+                  })}
+                >
+                  <File className="h-4 w-4" />
+                  <span className="ml-2">{node.name}</span>
+                </Link>
+              </ContextMenuTrigger>
             ) : null}
           </span>
           <ContextMenuContent className="w-56">
-            <DialogTrigger
-              asChild
-              onClick={() => setSelectedDialog("new-file")}
-            >
-              <ContextMenuItem inset>New File...</ContextMenuItem>
-            </DialogTrigger>
             {node.type === "folder" ? (
+              <>
+                <DialogTrigger
+                  asChild
+                  onClick={() => setSelectedDialog("new-file")}
+                >
+                  <ContextMenuItem inset>New File...</ContextMenuItem>
+                </DialogTrigger>
+                <DialogTrigger
+                  asChild
+                  onClick={() => setSelectedDialog("new-folder")}
+                >
+                  <ContextMenuItem inset>New Folder...</ContextMenuItem>
+                </DialogTrigger>
+                <ContextMenuSeparator />
+              </>
+            ) : null}
+            {["folder", "file"].includes(node.type) ? (
               <DialogTrigger
                 asChild
-                onClick={() => setSelectedDialog("new-folder")}
+                onClick={() =>
+                  setSelectedDialog(`rename-${node.type as "folder" | "file"}`)
+                }
               >
-                <ContextMenuItem inset>New Folder...</ContextMenuItem>
+                <ContextMenuItem inset>Rename</ContextMenuItem>
               </DialogTrigger>
             ) : null}
-            <ContextMenuSeparator />
-            <ContextMenuItem inset>Rename</ContextMenuItem>
             <ContextMenuItem inset>Delete</ContextMenuItem>
           </ContextMenuContent>
           {selectedDialog === "new-folder" ? (
@@ -119,6 +133,20 @@ export const FilesystemItem: FC<FilesystemItemProps> = ({
                 </DialogDescription>
               </DialogHeader>
               <NewFileForm workspaceId={workspaceId} folderId={node.id} />
+            </DialogContent>
+          ) : null}
+          {selectedDialog?.includes("rename") ? (
+            <DialogContent>
+              <DialogTitle>Rename &quot;{node.name}&quot;</DialogTitle>
+              <DialogDescription>
+                Give {node.type === "folder" ? "folder" : "file"}{" "}
+                <strong>{node.name}</strong> a new name
+              </DialogDescription>
+              <RenameForm
+                type={selectedDialog.split("-")[1] as "folder" | "file"}
+                currentName={node.name}
+                referenceId={node.id}
+              />
             </DialogContent>
           ) : null}
         </Dialog>
