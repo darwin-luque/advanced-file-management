@@ -2,6 +2,7 @@ import { z } from "zod";
 import { workspaceProcedure } from "../../trpc";
 import { files } from "../../../db/schema";
 import { TRPCError } from "@trpc/server";
+import { JSONContent } from "@tiptap/react";
 
 export const createFileSchema = z.object({
   folderId: z.string().uuid(),
@@ -22,9 +23,22 @@ export const createFile = workspaceProcedure
         code: "NOT_FOUND",
         message: "Folder not found",
       });
-    }
+    };
 
-    const initialContent = "<p>Hello World! 🌍️</p>";
+    const initialContent: JSONContent = {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              text: "Hello World! 🌍️",
+            },
+          ],
+        },
+      ],
+    };
 
     const [file] = await ctx.db
       .insert(files)
@@ -32,7 +46,7 @@ export const createFile = workspaceProcedure
         ...input,
         ownerId: ctx.auth.userId ?? "",
         content: initialContent,
-        size: initialContent.length,
+        size: JSON.stringify(initialContent).length,
         path: `${folder.path}/${input.name}`,
       })
       .returning();
