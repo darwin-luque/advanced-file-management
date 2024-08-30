@@ -1,4 +1,5 @@
-import { relations, sql } from "drizzle-orm";
+import type { JSONContent } from "@tiptap/react";
+import { relations } from "drizzle-orm";
 import {
   boolean,
   integer,
@@ -6,7 +7,6 @@ import {
   pgEnum,
   pgTable,
   primaryKey,
-  text,
   timestamp,
   uniqueIndex,
   uuid,
@@ -53,7 +53,7 @@ export const workspaces = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
-      .$onUpdateFn(() => sql`current_timestamp`)
+      .$onUpdate(() => new Date())
       .notNull(),
   },
   (ws) => ({
@@ -85,7 +85,7 @@ export const workspaceCollaborators = pgTable("workspace_collaborator", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
-    .$onUpdateFn(() => sql`current_timestamp`)
+    .$onUpdate(() => new Date())
     .notNull(),
 });
 
@@ -117,7 +117,7 @@ export const folders = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
-      .$onUpdateFn(() => sql`current_timestamp`)
+      .$onUpdate(() => new Date())
       .notNull(),
   },
   (folders) => ({
@@ -155,14 +155,16 @@ export const files = pgTable(
       .notNull()
       .references(() => folders.id),
     ownerId: varchar("owner_id", { length: 255 }).notNull(),
-    content: text("content").notNull(),
+    content: jsonb("content")
+      .$type<JSONContent>()
+      .notNull(),
     size: integer("size").notNull(),
     path: varchar("path", { length: 255 }).unique().notNull(),
     currentVersionId: uuid("current_version_id"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
-      .$onUpdateFn(() => sql`current_timestamp`)
+      .$onUpdate(() => new Date())
       .notNull(),
   },
   (files) => ({
@@ -201,7 +203,7 @@ export const fileVersions = pgTable("file_version", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
-    .$onUpdateFn(() => sql`current_timestamp`)
+    .$onUpdate(() => new Date())
     .notNull(),
 });
 
@@ -221,7 +223,7 @@ export const tags = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
-      .$onUpdateFn(() => sql`current_timestamp`)
+      .$onUpdate(() => new Date())
       .notNull(),
   },
   (tags) => ({
@@ -252,7 +254,7 @@ export const fileTags = pgTable(
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
-      .$onUpdateFn(() => sql`current_timestamp`)
+      .$onUpdate(() => new Date())
       .notNull(),
   },
   (fileTags) => ({
@@ -282,7 +284,7 @@ export const collaborators = pgTable("collaborator", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
-    .$onUpdateFn(() => sql`current_timestamp`)
+    .$onUpdate(() => new Date())
     .notNull(),
 });
 
