@@ -6,6 +6,7 @@ import { Bell, Menu, NotebookPen } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Filesystem } from "./filesystem";
+import { WorkspaceSelector } from "./workspace-selector";
 
 export type AppSidebarProps = {
   workspaceId: string;
@@ -26,6 +27,9 @@ export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId, paths }) => {
               <Bell className="h-4 w-4" />
               <span className="sr-only">Toggle notifications</span>
             </Button>
+          </div>
+          <div className="flex h-14 items-center justify-center border-b my-2">
+            <WorkspaceSelector workspaceId={workspaceId} />
           </div>
           <nav className="mx-2 my-2 grid flex-1 items-start overflow-scroll rounded-md bg-muted/30 text-sm font-medium lg:px-4">
             <div className="mt-1">
@@ -49,9 +53,9 @@ export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId, paths }) => {
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="flex flex-col p-0 w-full">
+            <SheetContent side="left" className="flex w-full flex-col p-0">
               <nav className="flex flex-1 flex-col items-center text-lg font-medium">
-                <div className="flex h-14 items-center border-b w-full px-4">
+                <div className="flex h-14 w-full items-center border-b px-4">
                   <Link
                     href="#"
                     className="flex items-center gap-2 text-lg font-semibold"
@@ -60,7 +64,7 @@ export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId, paths }) => {
                     <span className="">AFM</span>
                   </Link>
                 </div>
-                <div className="w-full h-full overflow-scroll px-1">
+                <div className="h-full w-full overflow-scroll px-1">
                   <Filesystem
                     workspaceId={workspaceId}
                     parentId={workspaceId}
