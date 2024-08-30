@@ -10,7 +10,7 @@ export type AppLayoutProps = PropsWithChildren & {
 
 export default function AppLayout({ children, params }: AppLayoutProps) {
   return (
-    <div className="flex h-screen w-full flex-col md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="flex h-screen w-full flex-col md:grid md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr]">
       <AppSidebar
         workspaceId={params.workspaceId}
         paths={params.paths?.map(decodeURI)}
