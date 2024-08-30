@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import type { FC } from "react";
-import { Bell, Menu, NotebookPen } from "lucide-react";
+import { Menu, NotebookPen } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Filesystem } from "./filesystem";
 import { WorkspaceSelector } from "./workspace-selector";
+import { UserButton } from "@clerk/nextjs";
 
 export type AppSidebarProps = {
   workspaceId: string;
@@ -21,14 +22,13 @@ export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId, paths }) => {
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/app" className="flex items-center gap-2 font-semibold">
               <NotebookPen className="h-6 w-6" />
-              <span className="">AFM</span>
+              <span className="sr-only">AFM</span>
             </Link>
-            <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-              <Bell className="h-4 w-4" />
-              <span className="sr-only">Toggle notifications</span>
-            </Button>
+            <div className="ml-auto h-8 w-8">
+              <UserButton />
+            </div>
           </div>
-          <div className="flex h-14 items-center justify-center border-b my-2">
+          <div className="my-2 flex h-14 items-center justify-center border-b">
             <WorkspaceSelector workspaceId={workspaceId} />
           </div>
           <nav className="mx-2 my-2 grid flex-1 items-start overflow-scroll rounded-md bg-muted/30 text-sm font-medium lg:px-4">
