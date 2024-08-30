@@ -1,29 +1,87 @@
-# Create T3 App
+# File Management System
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## Overview
 
-## What's next? How do I make an app with this?
+This is a web-based file management system that allows users to create, organize, and manage text-based files within a nested folder structure. The app includes features such as workspaces that can be shared between users, lazy loading, and cursor-based pagination for efficient data handling.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Features
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- **Nested Folders and Files:** Organize files within a hierarchical folder structure.
+- **Workspaces:** Manage multiple workspaces, each containing its own set of folders and files.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Tech Stack
 
-## Learn More
+- **Frontend:** Next.js, Tailwind CSS, TypeScript
+- **Backend:** tRPC, DrizzleORM, PostgreSQL
+- **Deployment:** Vercel
+- **Version Control:** Git/GitHub
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Getting Started
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### Prerequisites
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+Ensure you have the following installed:
 
-## How do I deploy this?
+- Node.js (v14 or higher)
+- npm or yarn
+- PostgreSQL
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### Installation
+
+1. Clone the repository:
+
+  ```bash
+  git clone https://github.com/your-username/your-repo-name.git
+  cd your-repo-name
+  ```
+
+2. Install dependencies:
+
+  ```bash
+  bun install
+  ```
+
+3. Set up the environment variables by copying .env.example to .env and configuring the necessary values.
+
+4. Run database and apply schema:
+
+  ```bash
+  docker compose up -d
+  bun db:push
+  ```
+
+5. Start the development server:
+
+  ```bash
+  bun dev
+  ```
+
+6. Open your browser and go to http://localhost:3000.
+
+## Folder Structure
+
+- app/: Contains the Next.js pages and api routes.
+  - app/**/_components: Specific components for each page.
+- components/: Reusable React components.
+- styles/: Global styles and Tailwind configuration.
+- server/: Backend code including tRPC procedures and database models.
+  - server/db/: Database connection and schema definitions.
+  - server/api/: tRPC routers for handling API requests.
+- utils/: Utility functions and helpers.
+
+## Key Files
+
+- trpc/: Contains the tRPC router and procedure definitions.
+- db/: Database connection and schema definitions using DrizzleORM.
+
+### API Endpoints
+
+- /api/trpc: Main API route for handling tRPC requests.
+
+### Deployment
+
+This project is configured to deploy to Vercel. Simply connect the repository to your Vercel account and follow the instructions to deploy.
+
+## Contributing
+
+Feel free to submit issues and pull requests.
