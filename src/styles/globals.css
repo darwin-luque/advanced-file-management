@@ -73,6 +73,11 @@
   @apply mt-14 mb-6;
 }
 
+.tiptap h1:first-child,
+.tiptap h2:first-child {
+  @apply !mt-2;
+}
+
 .tiptap h1 {
   @apply text-2xl
 }

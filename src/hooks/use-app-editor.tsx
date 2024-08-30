@@ -1,6 +1,6 @@
 "use client";
 
-import { useEditor } from "@tiptap/react";
+import { type Editor, type JSONContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Focus from "@tiptap/extension-focus";
 import Image from "@tiptap/extension-image";
@@ -17,27 +17,44 @@ import OrderedList from "@tiptap/extension-ordered-list";
 import CharacterCount from "@tiptap/extension-character-count";
 
 type UseAppEditorProps = {
-  content?: string;
+  content?: JSONContent;
 };
 
-export const useAppEditor = ({ content }: UseAppEditorProps = {}) => {
+export const useAppEditor = ({
+  content,
+}: UseAppEditorProps = {}): Editor | null => {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
       Image,
       TaskList,
       TaskItem,
-      ListItem,
       Underline,
       TextAlign,
-      StarterKit,
-      CharacterCount,
-      Heading.configure({
-        levels: [1, 2, 3, 4, 5, 6],
-        HTMLAttributes: {
-          class: "leading-5 mt-10 text-pretty font-bold",
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2, 3, 4, 5, 6],
+          HTMLAttributes: {
+            class: "leading-5 mt-10 text-pretty font-bold",
+          },
+        },
+        bulletList: {
+          HTMLAttributes: {
+            class: "list-disc ml-6 space-y-2",
+          },
+        },
+        orderedList: {
+          HTMLAttributes: {
+            class: "list-decimal ml-6 space-y-2",
+          },
+        },
+        paragraph: {
+          HTMLAttributes: {
+            class: "w-full",
+          },
         },
       }),
+      CharacterCount,
       Highlight.configure({
         HTMLAttributes: {
           class: "bg-yellow-300",
@@ -45,21 +62,6 @@ export const useAppEditor = ({ content }: UseAppEditorProps = {}) => {
       }),
       Focus.configure({
         className: "outline-none",
-      }),
-      BulletList.configure({
-        HTMLAttributes: {
-          class: "list-disc ml-6 space-y-2",
-        },
-      }),
-      OrderedList.configure({
-        HTMLAttributes: {
-          class: "list-decimal ml-6 space-y-2",
-        },
-      }),
-      Paragraph.configure({
-        HTMLAttributes: {
-          class: "w-full",
-        },
       }),
     ],
     editorProps: {
