@@ -8,6 +8,8 @@ export const createFolderSchema = z.object({
   name: z.string(),
 });
 
+const EMPTY_UUID = "00000000-0000-0000-0000-000000000000";
+
 export const createFolder = workspaceProcedure
   .input(createFolderSchema)
   .mutation(async ({ ctx, input }) => {
@@ -17,7 +19,7 @@ export const createFolder = workspaceProcedure
 
     const parentFolder = await ctx.db.query.folders.findFirst({
       where(fields, { eq }) {
-        return eq(fields.id, input.parentFolderId ?? "");
+        return eq(fields.id, input.parentFolderId ?? EMPTY_UUID)
       },
     });
 

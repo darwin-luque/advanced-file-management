@@ -20,11 +20,14 @@ const formSchema = z.object({
 });
 
 export type NewFolderFormProps = {
-  parentId: string;
+  parentId?: string;
   workspaceId: string;
 };
 
-export const NewFolderForm: FC<NewFolderFormProps> = ({ parentId, workspaceId }) => {
+export const NewFolderForm: FC<NewFolderFormProps> = ({
+  parentId,
+  workspaceId,
+}) => {
   const utils = api.useUtils();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

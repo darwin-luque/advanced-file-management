@@ -8,6 +8,21 @@ import { Button } from "@/components/ui/button";
 import { Filesystem } from "./filesystem";
 import { WorkspaceSelector } from "./workspace-selector";
 import { UserButton } from "@clerk/nextjs";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { NewFolderForm } from "./filesystem/item/new-folder-form";
 
 export type AppSidebarProps = {
   workspaceId: string;
@@ -28,20 +43,40 @@ export const AppSidebar: FC<AppSidebarProps> = ({ workspaceId, paths }) => {
               <UserButton />
             </div>
           </div>
-          <div className="my-2 flex h-14 items-center justify-center border-b">
+          <div className="flex h-14 items-center justify-center border-b">
             <WorkspaceSelector workspaceId={workspaceId} />
           </div>
-          <nav className="mx-2 my-2 grid flex-1 items-start overflow-scroll rounded-md bg-muted/30 text-sm font-medium lg:px-4">
-            <div className="mt-1">
-              <Filesystem
-                workspaceId={workspaceId}
-                parentId={workspaceId}
-                type="workspace"
-                allPaths={paths}
-                paths={paths}
-              />
-            </div>
-          </nav>
+          <Dialog>
+            <ContextMenu>
+              <ContextMenuTrigger className="flex flex-1 overflow-auto">
+                <nav className="grid flex-1 items-start rounded-md bg-muted/30 pt-2 text-sm font-medium lg:px-4">
+                  <div className="mt-1">
+                    <Filesystem
+                      workspaceId={workspaceId}
+                      parentId={workspaceId}
+                      type="workspace"
+                      allPaths={paths}
+                      paths={paths}
+                    />
+                  </div>
+                </nav>
+              </ContextMenuTrigger>
+              <ContextMenuContent className="w-56">
+                <DialogTrigger asChild>
+                  <ContextMenuItem inset>New Folder...</ContextMenuItem>
+                </DialogTrigger>
+              </ContextMenuContent>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>New Folder</DialogTitle>
+                  <DialogDescription>
+                    Create a new folder in root
+                  </DialogDescription>
+                </DialogHeader>
+                <NewFolderForm workspaceId={workspaceId} />
+              </DialogContent>
+            </ContextMenu>
+          </Dialog>
         </div>
       </div>
       <div className="flex shrink-0 flex-col md:hidden">
