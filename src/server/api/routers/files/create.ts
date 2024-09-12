@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { workspaceProcedure } from "../../trpc";
-import { files } from "../../../db/schema";
 import { TRPCError } from "@trpc/server";
-import { JSONContent } from "@tiptap/react";
+import type { JSONContent } from "@tiptap/react";
+import { workspaceProcedure } from "@/server/api/trpc";
+import { files } from "@/server/db/schema";
 
 export const createFileSchema = z.object({
   folderId: z.string().uuid(),
