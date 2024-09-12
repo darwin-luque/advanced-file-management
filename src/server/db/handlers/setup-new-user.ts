@@ -48,6 +48,7 @@ export const setupNewUser = async (user: UserJSON): Promise<void> => {
       name: "Home",
       ownerId: newUser.id,
       workspaceId: newWorkspace.id,
+      path: "/Home",
     })
     .returning();
 };
