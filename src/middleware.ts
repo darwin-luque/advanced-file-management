@@ -1,9 +1,7 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-
-const isPrivateRoute = createRouteMatcher(["/app(.*)"]);
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
 export default clerkMiddleware((auth, req) => {
-  if (isPrivateRoute(req)) {
+  if (req.url.startsWith("/app")) {
     auth().protect();
   }
 });

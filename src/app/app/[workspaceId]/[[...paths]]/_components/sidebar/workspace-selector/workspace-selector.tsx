@@ -46,8 +46,6 @@ export const WorkspaceSelector: FC<WorkspaceSelectorProps> = ({
     [currentWorkspace?.name],
   );
 
-  console.log({ workspaces });
-
   return (
     <Popover>
       <PopoverTrigger asChild>
