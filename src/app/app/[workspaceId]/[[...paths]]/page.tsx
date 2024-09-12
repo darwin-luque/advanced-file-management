@@ -1,6 +1,8 @@
-import { NoDocIcon } from "@/components/assets/icons/no-doc";
-import { AppEditor } from "./_components/editor";
 import { api } from "@/trpc/server";
+import { notFound } from "next/navigation";
+import { TRPCError } from "@trpc/server";
+import { AppEditor } from "./_components/editor";
+import { NoDocIcon } from "@/components/assets/icons/no-doc";
 
 export type AppPageProps = {
   params: {
@@ -19,7 +21,14 @@ export default async function AppPage({ params }: AppPageProps) {
   }
 
   const paths = params.paths.map((path) => decodeURI(path));
-  const file = await api.files.getByPath(`/${paths.join("/")}`);
+  const file = await api.files.getByPath(`/${paths.join("/")}`)
+    .catch((err) => {
+      if (err instanceof TRPCError && err.code === "NOT_FOUND") {
+        notFound();
+      }
+
+      throw err;
+    });
 
   return (
     <main className="relative flex h-full w-full flex-col">
