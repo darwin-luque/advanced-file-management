@@ -8,5 +8,5 @@ export default {
   dbCredentials: {
     url: env.DATABASE_URL,
   },
-  tablesFilter: ["advanced-file-management_*"],
+  tablesFilter: ["afm_*"],
 } satisfies Config;

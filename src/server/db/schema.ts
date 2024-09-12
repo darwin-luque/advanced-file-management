@@ -1,17 +1,19 @@
 import type { JSONContent } from "@tiptap/react";
 import { relations } from "drizzle-orm";
 import {
-  boolean,
-  integer,
+  uuid,
   jsonb,
   pgEnum,
-  pgTable,
-  primaryKey,
-  timestamp,
-  uniqueIndex,
-  uuid,
+  integer,
   varchar,
+  boolean,
+  timestamp,
+  primaryKey,
+  uniqueIndex,
+  pgTableCreator,
 } from "drizzle-orm/pg-core";
+
+export const table = pgTableCreator((n) => `afm_${n}`);
 
 export const permissionLevelsEnum = pgEnum("workspace_permission_levels_enum", [
   "read",
@@ -19,7 +21,7 @@ export const permissionLevelsEnum = pgEnum("workspace_permission_levels_enum", [
   "admin",
 ]);
 
-export const users = pgTable("user", {
+export const users = table("user", {
   id: varchar("id", { length: 255 }).primaryKey(),
   username: varchar("username", { length: 255 }),
   firstName: varchar("first_name", { length: 255 }),
@@ -40,7 +42,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   fileCollaborators: many(collaborators),
 }));
 
-export const workspaces = pgTable(
+export const workspaces = table(
   "workspace",
   {
     id: uuid("id").defaultRandom().primaryKey(),
@@ -73,7 +75,7 @@ export const workspacesRelations = relations(workspaces, ({ many, one }) => ({
   folders: many(folders),
 }));
 
-export const workspaceCollaborators = pgTable("workspace_collaborator", {
+export const workspaceCollaborators = table("workspace_collaborator", {
   id: uuid("id").defaultRandom().primaryKey(),
   workspaceId: uuid("workspace_id")
     .notNull()
@@ -103,7 +105,7 @@ export const workspaceCollaboratorsRelations = relations(
   }),
 );
 
-export const folders = pgTable(
+export const folders = table(
   "folder",
   {
     id: uuid("id").defaultRandom().primaryKey(),
@@ -146,7 +148,7 @@ export const foldersRelations = relations(folders, ({ one, many }) => ({
   collaborators: many(collaborators),
 }));
 
-export const files = pgTable(
+export const files = table(
   "file",
   {
     id: uuid("id").defaultRandom().primaryKey(),
@@ -193,7 +195,7 @@ export const filesRelations = relations(files, ({ one, many }) => ({
   collaborators: many(collaborators),
 }));
 
-export const fileVersions = pgTable("file_version", {
+export const fileVersions = table("file_version", {
   id: uuid("id").defaultRandom().primaryKey(),
   fileId: uuid("file_id")
     .notNull()
@@ -214,7 +216,7 @@ export const fileVersionsRelations = relations(fileVersions, ({ one }) => ({
   }),
 }));
 
-export const tags = pgTable(
+export const tags = table(
   "tag",
   {
     id: uuid("id").defaultRandom().primaryKey(),
@@ -242,7 +244,7 @@ export const tagsRelations = relations(tags, ({ one, many }) => ({
   fileTags: many(fileTags),
 }));
 
-export const fileTags = pgTable(
+export const fileTags = table(
   "file_tag",
   {
     fileId: uuid("file_id")
@@ -275,7 +277,7 @@ export const fileTagsRelations = relations(fileTags, ({ one }) => ({
 
 export const resourceTypeEnum = pgEnum("resource_type", ["folder", "file"]);
 
-export const collaborators = pgTable("collaborator", {
+export const collaborators = table("collaborator", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: varchar("user_id", { length: 255 }).notNull(),
   resourceType: resourceTypeEnum("resource_type").notNull(),
