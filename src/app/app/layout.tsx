@@ -5,7 +5,6 @@ import type { PropsWithChildren } from "react";
 export default function AppLayout({ children }: PropsWithChildren) {
   const user = auth();
 
-  console.log({ user });
   if (!user) {
     redirect("/sign-in");
   }
