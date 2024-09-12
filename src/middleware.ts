@@ -1,10 +1,6 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 
-export default clerkMiddleware((auth, req) => {
-  if (req.url.startsWith("/app")) {
-    auth().protect();
-  }
-});
+export default clerkMiddleware();
 
 export const config = {
   matcher: [
